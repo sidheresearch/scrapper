@@ -298,7 +298,10 @@ if __name__ == '__main__':
     print("  GET    /api/download/<id>   - Download result file")
     print("  GET    /api/health          - Health check")
     print("=" * 60)
-    print("\nStarting server on http://localhost:5000")
+    
+    # Use PORT from environment variable (for Render) or default to 5000
+    port = int(os.environ.get('PORT', 5000))
+    print(f"\nStarting server on http://0.0.0.0:{port}")
     print("Press CTRL+C to stop the server\n")
     
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=False, host='0.0.0.0', port=port)
