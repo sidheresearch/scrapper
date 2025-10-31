@@ -1,7 +1,9 @@
 import axios from 'axios';
 
-// Try proxy first, then fall back to direct connection
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+// API base URL - will use environment variable in production
+const API_BASE_URL = process.env.REACT_APP_API_URL 
+  ? `${process.env.REACT_APP_API_URL}/api`
+  : 'http://localhost:5000/api';
 
 // Configure axios defaults
 axios.defaults.timeout = 30000;
