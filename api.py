@@ -23,17 +23,12 @@ app = Flask(__name__)
 
 # Enable CORS with specific configuration
 CORS(app, resources={
-    r"/api/*": {
-        "origins": [
-            "http://localhost:3000", 
-            "http://localhost:3001", 
-            "http://127.0.0.1:3000", 
-            "http://127.0.0.1:3001",
-            "https://crystal-scraper-frontend.onrender.com",  # Add your actual Render frontend URL here
-            "*"  # Allow all origins for now (change this in production)
-        ],
-        "methods": ["GET", "POST", "OPTIONS"],
-        "allow_headers": ["Content-Type"]
+    r"/*": {  # Allow CORS on all routes, not just /api/*
+        "origins": "*",  # Allow all origins
+        "methods": ["GET", "POST", "OPTIONS", "HEAD"],
+        "allow_headers": ["Content-Type", "Authorization"],
+        "expose_headers": ["Content-Type"],
+        "supports_credentials": False
     }
 })
 
