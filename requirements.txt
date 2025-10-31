@@ -2,15 +2,13 @@
 flask==3.0.0
 flask-cors==4.0.0
 
-# LangChain dependencies (install core first)
-langchain-core==1.0.2
-langchain-text-splitters==0.3.4
-langchain-community==0.4.1
-langchain-together==0.0.2.post1
-langchain-google-genai==3.0.0
+# LangChain dependencies - let pip resolve compatible versions
+langchain-community==0.3.13
+langchain-together==0.2.0
+langchain-google-genai==2.0.5
 
 # Other dependencies
-aiohttp==3.13.2
-beautifulsoup4==4.14.2
+aiohttp==3.10.11
+beautifulsoup4==4.12.3
 python-dotenv==1.0.0
 gunicorn==21.2.0
