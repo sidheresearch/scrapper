@@ -16,7 +16,16 @@ import sys
 # Add the scraper to the path
 sys.path.append(os.path.join(os.path.dirname(__file__), 'scraper'))
 
-from scraper import Scraper, ScrapedContent
+# Import scraper with error handling
+try:
+    from scraper import Scraper, ScrapedContent
+    SCRAPER_AVAILABLE = True
+    logging.info("Scraper module loaded successfully")
+except Exception as e:
+    logging.error(f"Failed to load scraper module: {e}")
+    SCRAPER_AVAILABLE = False
+    Scraper = None
+    ScrapedContent = None
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -138,6 +147,13 @@ def scrape_website():
         "filename": "custom_name" (optional)
     }
     """
+    # Check if scraper is available
+    if not SCRAPER_AVAILABLE:
+        return jsonify({
+            'error': 'Scraper module is not available. Please check server logs.',
+            'status': 'unavailable'
+        }), 503
+    
     try:
         data = request.get_json()
         

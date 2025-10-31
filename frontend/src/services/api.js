@@ -1,9 +1,8 @@
 import axios from 'axios';
 
 // API base URL - will use environment variable in production
-const API_BASE_URL = process.env.REACT_APP_API_URL 
-  ? `${process.env.REACT_APP_API_URL}/api`
-  : 'http://localhost:5000/api';
+// Temporary: hardcode production URL for testing
+const API_BASE_URL = 'https://scrapper-3-xmxh.onrender.com/api';
 
 console.log('API Base URL:', API_BASE_URL);
 console.log('Environment REACT_APP_API_URL:', process.env.REACT_APP_API_URL);
