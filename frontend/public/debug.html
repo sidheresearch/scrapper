@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API Debug</title>
+</head>
+<body>
+    <h1>API Connection Test</h1>
+    <button onclick="testDirect()">Test Direct (Port 5000)</button>
+    <button onclick="testProxy()">Test Proxy (Port 3001)</button>
+    <pre id="result"></pre>
+
+    <script>
+        async function testDirect() {
+            const result = document.getElementById('result');
+            result.textContent = 'Testing direct connection to http://localhost:5000/api/health...\n';
+            
+            try {
+                const response = await fetch('http://localhost:5000/api/health', {
+                    method: 'GET',
+                    mode: 'cors'
+                });
+                const data = await response.json();
+                result.textContent += 'SUCCESS!\n' + JSON.stringify(data, null, 2);
+            } catch (error) {
+                result.textContent += 'ERROR: ' + error.message + '\n' + error.stack;
+            }
+        }
+
+        async function testProxy() {
+            const result = document.getElementById('result');
+            result.textContent = 'Testing proxy connection to /api/health...\n';
+            
+            try {
+                const response = await fetch('/api/health', {
+                    method: 'GET'
+                });
+                const data = await response.json();
+                result.textContent += 'SUCCESS!\n' + JSON.stringify(data, null, 2);
+            } catch (error) {
+                result.textContent += 'ERROR: ' + error.message + '\n' + error.stack;
+            }
+        }
+
+        // Auto-test on load
+        window.onload = () => {
+            console.log('Page loaded, testing connections...');
+            testDirect();
+        };
+    </script>
+</body>
+</html>

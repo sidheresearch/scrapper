@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crystal Scraper - API Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        h1 { color: #667eea; text-align: center; }
+        .status { 
+            padding: 15px; 
+            border-radius: 10px; 
+            margin: 20px 0;
+            text-align: center;
+            font-weight: bold;
+        }
+        .online { background: #d4edda; color: #155724; }
+        .offline { background: #f8d7da; color: #721c24; }
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            margin: 10px 0;
+        }
+        button:hover { opacity: 0.9; }
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        .result {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔮 Crystal Scraper API</h1>
+        
+        <div class="info">
+            <strong>Setup Instructions:</strong><br>
+            1. Backend API is running ✅<br>
+            2. Open a NEW terminal<br>
+            3. Run: <code>cd frontend && npm install</code><br>
+            4. Run: <code>npm start</code><br>
+            5. Frontend will open at http://localhost:3000
+        </div>
+
+        <div id="status" class="status">Checking API...</div>
+        
+        <h3>Quick API Test</h3>
+        <input type="text" id="testUrl" placeholder="Enter URL to scrape" value="https://example.com">
+        <button onclick="testScrape()">Test Scraping</button>
+        
+        <div id="result" class="result" style="display:none;"></div>
+    </div>
+
+    <script>
+        // Check API health
+        async function checkHealth() {
+            try {
+                const response = await fetch('http://localhost:5000/api/health');
+                const data = await response.json();
+                document.getElementById('status').innerHTML = 
+                    `✅ API Online: ${data.service} v${data.version}`;
+                document.getElementById('status').className = 'status online';
+            } catch (error) {
+                document.getElementById('status').innerHTML = 
+                    '❌ API Offline - Make sure backend is running!';
+                document.getElementById('status').className = 'status offline';
+            }
+        }
+
+        // Test scraping
+        async function testScrape() {
+            const url = document.getElementById('testUrl').value;
+            const resultDiv = document.getElementById('result');
+            
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = 'Scraping... Please wait...';
+            
+            try {
+                const response = await fetch('http://localhost:5000/api/scrape', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        url: url,
+                        depth: 0,
+                        llm_enabled: true
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    resultDiv.innerHTML = `
+✅ SUCCESS!
+URL: ${data.url}
+Title: ${data.title}
+Scrape Time: ${data.scrape_time.toFixed(2)}s
+Content Length: ${data.total_length.toLocaleString()} characters
+Filename: ${data.filename}
+
+Preview:
+${data.content_preview}
+                    `;
+                } else {
+                    resultDiv.innerHTML = `❌ Error: ${data.error}`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `❌ Error: ${error.message}`;
+            }
+        }
+
+        // Check health on load
+        checkHealth();
+        setInterval(checkHealth, 5000); // Check every 5 seconds
+    </script>
+</body>
+</html>
