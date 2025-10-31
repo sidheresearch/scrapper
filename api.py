@@ -104,6 +104,22 @@ def format_scraped_content(content: ScrapedContent) -> str:
     return '\n'.join(output)
 
 
+@app.route('/', methods=['GET'])
+def root():
+    """Root endpoint - redirect to health check"""
+    return jsonify({
+        'message': 'Crystal Scraper API',
+        'status': 'online',
+        'endpoints': {
+            'health': '/api/health',
+            'scrape': '/api/scrape',
+            'results': '/api/results',
+            'download': '/api/download/<id>'
+        },
+        'docs': 'https://github.com/sidheresearch/scrapper'
+    })
+
+
 @app.route('/api/health', methods=['GET'])
 def health_check():
     """Health check endpoint"""
