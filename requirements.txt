@@ -3,7 +3,7 @@ flask==3.0.0
 flask-cors==4.0.0
 
 # LangChain dependencies (install core first)
-langchain-core==1.0.31
+langchain-core==1.0.2
 langchain-text-splitters==0.3.4
 langchain-community==0.4.1
 langchain-together==0.0.2.post1
